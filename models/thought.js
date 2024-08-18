@@ -27,7 +27,14 @@ const thoughtSchema = new Schema({
         type: String,
         required: true
     },
-    reactions: [reactionSchema]
+    reactions: [
+        {
+            // use the reaction schema. This is not a model, but a subdocument schema.
+            // will not just pass in the Reaction model, but the entire schema to use as the reaction field's data type. More efficient. 
+            type: Schema.Types.ObjectId,
+            ref: 'Reaction',
+        },
+    ],
 }, {
     toJSON: {
         virtuals: true,

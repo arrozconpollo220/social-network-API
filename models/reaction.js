@@ -1,9 +1,10 @@
 // Initialize Mongoose
 const { Schema, model } = require('mongoose');
 
+// import the dateformat library
 const dateFormat = require('dateformat');
 
-
+// create the Reaction schema
 const reactionSchema = new Schema(
     {
         reactionId: {
@@ -33,5 +34,6 @@ const reactionSchema = new Schema(
     }
 );
 
+// export the Reaction model
 module.exports = reactionSchema;
 
