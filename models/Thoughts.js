@@ -1,11 +1,12 @@
 // import the Schema constructor and model function from Mongoose
 const { Schema, model } = require('mongoose');
+const Reaction = require('./Reactions');
+const { format } = require('date-fns');
 
-// import reaction schema
-const { schema: reactionSchema } = require('./reaction');
 
-// import the dateformat library
-const dateFormat = require('dateformat'); 
+const formatDate = date = function(date) {
+    return format(date, 'MM/dd/yyyy');
+};
 
 // create the Thought schema
 const thoughtSchema = new Schema({
@@ -19,9 +20,7 @@ const thoughtSchema = new Schema({
         type: Date,
         default: Date.now,
         // use a getter method to format the timestamp on query
-        get: function(timestamp) {
-            return dateFormat(timestamp, 'mm/dd/yyyy hh:mm:ss');
-        }
+        get: formatDate
     },
     username: {
         type: String,
@@ -46,7 +45,7 @@ const thoughtSchema = new Schema({
 // get total count of reactions on retrieval
 thoughtSchema.virtual('reactionCount').get(function () {
     return this.reactions.length;
-});
+});   
 
 const Thought = model('Thought', thoughtSchema);
 

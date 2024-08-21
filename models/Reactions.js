@@ -1,10 +1,13 @@
-// Initialize Mongoose
-const { Schema, model } = require('mongoose');
 
-// import the dateformat library
-const dateFormat = require('dateformat');
+const { Schema, Types } = require('mongoose');
 
-// create the Reaction schema
+const { format } = require('date-fns');
+
+
+const formatDate = date = function(date) {
+    return format(date, 'MM/dd/yyyy');
+};
+
 const reactionSchema = new Schema(
     {
         reactionId: {
@@ -14,7 +17,8 @@ const reactionSchema = new Schema(
         reactionBody: {
             type: String,
             required: true,
-            maxLength: 280
+            minLength: 1,
+            manxLength: 280,
         },
         username: {
             type: String,
@@ -23,7 +27,7 @@ const reactionSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
-            get: timestamp => dateFormat(timestamp, 'mm/dd/yyyy hh:mm:ss')
+            get: formatDate
         }
     },
     {
@@ -34,6 +38,4 @@ const reactionSchema = new Schema(
     }
 );
 
-// export the Reaction model
 module.exports = reactionSchema;
-

@@ -16,7 +16,7 @@ module.exports = {
             const thought = await Thought.findOne({ _id: req.params.thoughtId });
 
             if (!thought) {
-                return res.status(404).json({ message: 'Cannot find ID' });
+                return res.status(404).json({ message: 'Incorrect Thought ID or ID Does Not Exist' });
             }
 
             res.json(thought);
@@ -40,7 +40,7 @@ module.exports = {
             const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
 
             if (!thought) {
-                return res.status(404).json({ message: 'Cannot find ID' });
+                return res.status(404).json({ message: 'Incorrect Thought ID or ID Does Not Exist' });
             }
 
             await User.findOneAndUpdate(
@@ -63,7 +63,7 @@ module.exports = {
             );
 
             if (!thought) {
-                return res.status(404).json({ message: 'Cannot find ID' });
+                return res.status(404).json({ message: 'Incorrect Thought ID or ID Does Not Exist' });
             }
 
             res.json(thought);
@@ -82,5 +82,23 @@ module.exports = {
         } catch (err) {
             res.status(500).json(err);
         }
-    }
-};
+    },
+
+    async removeReaction(req, res) {
+        try {
+            const thought = await Thought.findOneAndUpdate(
+                { _id: req.params.thoughtId },
+                { $pull: { reactions: { reactionId: req.params.reactionId } } },
+                { runValidators: true, new: true }
+            )
+
+            if (!thought) {
+                return res.status(404).json({ message: 'Incorrect Reaction ID or ID Does Not Exist' });
+            }
+
+            res.json(thought);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+}
