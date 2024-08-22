@@ -1,6 +1,4 @@
-
 const { Schema, Types } = require('mongoose');
-
 const { format } = require('date-fns');
 
 
@@ -32,6 +30,7 @@ const reactionSchema = new Schema(
     },
     {
         toJSON: {
+            // includes getters
             getters: true
         },
         id: false

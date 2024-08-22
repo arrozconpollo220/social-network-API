@@ -71,19 +71,28 @@ module.exports = {
             res.status(500).json(err);
         }
     },
-    // Add a reaction
+    // Add a reaction to a thought
     async addReaction(req, res) {
         try {
             const thought = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
-                { $push: { reactions: req.body } },
-                { runValidators: true, new: true }
-            );
+                { $addToSet: { reactions: req.body } },
+                { new: true }
+            )
+
+            if (!thought) {
+                return res
+                    .status(404)
+                    .json({ message: 'Incorrect Thought ID or ID Does Not Exist' });
+            }
+
+            res.json({ message: 'Reaction successfully added!' });
         } catch (err) {
             res.status(500).json(err);
         }
     },
 
+    // Remove a reaction from a thought
     async removeReaction(req, res) {
         try {
             const thought = await Thought.findOneAndUpdate(
