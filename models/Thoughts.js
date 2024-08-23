@@ -4,7 +4,7 @@ const Reaction = require('./Reactions');
 const { format } = require('date-fns');
 
 
-const formatDate = date = function(date) {
+const formatDate = date = function (date) {
     return format(date, 'MM/dd/yyyy');
 };
 
@@ -26,26 +26,24 @@ const thoughtSchema = new Schema({
         type: String,
         required: true
     },
-    reactions: [
-        {
-            // use the reaction schema. This is not a model, but a subdocument schema.
-            // will not just pass in the Reaction model, but the entire schema to use as the reaction field's data type. More efficient. 
-            type: Schema.Types.ObjectId,
-            ref: 'Reaction',
+    reactions: [Reaction],
+// use the reaction schema. This is not a model, but a subdocument schema.
+    // will not just pass in the Reaction model, but the entire schema to use as the reaction field's data type. More efficient. 
+
+
+},
+    {
+        toJSON: {
+            virtuals: true,
+            getters: true
         },
-    ],
-}, {
-    toJSON: {
-        virtuals: true,
-        getters: true
-    },
-    id: false
-});
+        id: false
+    });
 
 // get total count of reactions on retrieval
 thoughtSchema.virtual('reactionCount').get(function () {
     return this.reactions.length;
-});   
+});
 
 const Thought = model('Thought', thoughtSchema);
 

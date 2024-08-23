@@ -17,12 +17,16 @@ const userSchema = new Schema(
         },
         thoughts: [
             {
+                // adding the type to the ObjectId to link to the Thought model
+                // this will return just the id of the thought and not the entire meta data
                 type: Schema.Types.ObjectId,
                 ref: 'Thought'
             }
         ],
         friends: [
             {
+                // adding the type to the ObjectId to link to the User model
+                // this will return just the id of the user and not the entire meta data
                 type: Schema.Types.ObjectId,
                 ref: 'User'
             }

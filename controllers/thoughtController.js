@@ -28,12 +28,18 @@ module.exports = {
     async createThought(req, res) {
         try {
             const thought = await Thought.create(req.body);
+            const user = await User.findOneAndUpdate(
+                { username: req.body.username },
+                { $push: { thoughts: thought._id } },
+                { new: true }
+            );
+
             res.json(thought);
         } catch (err) {
-            console.log(err);
-            return res.status(500).json(err);
+            res.status(500).json(err);
         }
     },
+    
     // Delete a thought
     async deleteThought(req, res) {
         try {
@@ -76,7 +82,7 @@ module.exports = {
         try {
             const thought = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
-                { $addToSet: { reactions: req.body } },
+                { $addToSet: { reactions: req.body }},
                 { new: true }
             )
 
